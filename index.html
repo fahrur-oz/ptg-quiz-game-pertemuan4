@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Decoder 20 Soal - Cyber Lab Pengantar Teknologi Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --cyan: #06b6d4;
+            --cyan-glow: rgba(6, 182, 212, 0.45);
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --green: #10b981;
+            --red: #ef4444;
+            --glass: rgba(15, 23, 42, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.18) 0%, transparent 45%),
+                linear-gradient(rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .game-shell {
+            width: 100%;
+            max-width: 1060px;
+            min-height: 680px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(6, 182, 212, 0.5);
+            border-radius: 26px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 40px rgba(6, 182, 212, 0.25);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-shell::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink), var(--cyan));
+            background-size: 200% 100%;
+            animation: gradientMove 4s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            flex: 1;
+            padding: 24px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .active {
+            display: flex;
+            animation: zoomFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes zoomFade {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* SCREEN 1: REGISTRASI IDENTITAS */
+        .reg-card {
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid rgba(6, 182, 212, 0.45);
+            border-radius: 22px;
+            padding: 36px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(6, 182, 212, 0.12);
+            text-align: center;
+        }
+
+        .cyber-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #a855f7, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #38bdf8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 11px 15px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(56, 189, 248, 0.3);
+            background-color: rgba(30, 41, 59, 0.85);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 18px var(--cyan-glow);
+            background-color: #0f172a;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #06b6d4 0%, #6366f1 50%, #ec4899 100%);
+            color: white;
+            padding: 13px 26px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+            width: 100%;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.7);
+            filter: brightness(1.1);
+        }
+
+        /* SCREEN 2: ARENA DEKODER */
+        .hud-header {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: rgba(3, 7, 18, 0.85);
+            border-bottom: 1.5px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .player-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #e2e8f0;
+            background: rgba(6, 182, 212, 0.12);
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(6, 182, 212, 0.35);
+        }
+
+        .hud-metrics {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-box {
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .metric-stage {
+            background: rgba(139, 92, 246, 0.18);
+            border: 1px solid rgba(139, 92, 246, 0.45);
+            color: #c4b5fd;
+        }
+
+        .metric-lives {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
+            letter-spacing: 2px;
+        }
+
+        .metric-score {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            color: #6ee7b7;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 5%;
+            background: linear-gradient(90deg, var(--cyan), var(--pink));
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--cyan);
+        }
+
+        .decoder-stage {
+            width: 100%;
+            flex: 1;
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .signal-monitor {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.75));
+            border: 2px solid rgba(6, 182, 212, 0.45);
+            border-radius: 18px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(6, 182, 212, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .signal-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--cyan);
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            padding: 3px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .signal-clue {
+            font-size: 15px;
+            font-weight: 600;
+            color: #f8fafc;
+            line-height: 1.55;
+            max-width: 780px;
+            margin-bottom: 10px;
+        }
+
+        .signal-hint-pill {
+            font-size: 12px;
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 5px 14px;
+            border-radius: 8px;
+            border-left: 3px solid var(--purple);
+        }
+
+        .decoder-slot {
+            margin-top: 14px;
+            width: 100%;
+            max-width: 360px;
+            height: 48px;
+            border: 2px dashed rgba(56, 189, 248, 0.6);
+            border-radius: 12px;
+            background: rgba(3, 7, 18, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: #64748b;
+            letter-spacing: 1px;
+            transition: all 0.25s;
+        }
+
+        .decoder-slot.drag-over {
+            border-color: var(--pink);
+            background: rgba(236, 72, 153, 0.15);
+            transform: scale(1.03);
+            color: #f472b6;
+        }
+
+        .decoder-slot.correct-flash {
+            border: 2px solid var(--green);
+            background: rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+        }
+
+        .decoder-slot.wrong-flash {
+            border: 2px solid var(--red);
+            background: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+            animation: shakeHorizontal 0.4s ease;
+        }
+
+        @keyframes shakeHorizontal {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .deck-container {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1.5px solid rgba(139, 92, 246, 0.35);
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .deck-label {
+            font-size: 11.5px;
+            color: #a5b4fc;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chips-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .chips-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media (max-width: 550px) {
+            .chips-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .genre-chip {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border: 1.5px solid rgba(6, 182, 212, 0.4);
+            border-radius: 10px;
+            padding: 10px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            user-select: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .genre-chip:hover:not(.used) {
+            transform: translateY(-3px);
+            border-color: #38bdf8;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(99, 102, 241, 0.25));
+            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.4);
+        }
+
+        .genre-chip .chip-icon {
+            font-size: 18px;
+        }
+
+        .genre-chip .chip-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.2;
+        }
+
+        .genre-chip.used {
+            opacity: 0.25;
+            pointer-events: none;
+            border-color: #334155;
+            filter: grayscale(1);
+        }
+
+        /* SCREEN 3: HASIL */
+        .result-box {
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid var(--cyan);
+            border-radius: 24px;
+            padding: 34px;
+            max-width: 490px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(6, 182, 212, 0.3);
+        }
+
+        .score-ring {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            margin: 18px auto;
+            border: 4px solid var(--cyan);
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+        }
+
+        .score-ring .big-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: #38bdf8;
+        }
+
+        .score-ring .max-num {
+            font-size: 11.5px;
+            color: #94a3b8;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+        .rank-gold { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #facc15; }
+        .rank-silver { background: rgba(148, 163, 184, 0.2); color: #e2e8f0; border: 1px solid #e2e8f0; }
+        .rank-bronze { background: rgba(217, 119, 6, 0.2); color: #fb923c; border: 1px solid #fb923c; }
+        .rank-fail { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
+    </style>
+</head>
+<body>
+
+<div class="game-shell">
+
+    <!-- SCREEN 1: REGISTRASI IDENTITAS PEMAIN -->
+    <div id="register-screen" class="screen active">
+        <div class="reg-card">
+            <h1 class="cyber-title">GENRE DECODER</h1>
+            <p class="subtitle">Cyber Lab Analisis Genre Game – 20 Modul Sinyal</p>
+            
+            <div class="form-group">
+                <label for="playerName">Nama Lengkap</label>
+                <input type="text" id="playerName" placeholder="Masukkan nama mahasiswa..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="playerNPM">NPM</label>
+                <input type="text" id="playerNPM" placeholder="Masukkan NPM..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="playerClass">Kelas</label>
+                <select id="playerClass" required>
+                    <option value="" disabled selected>-- Pilih Kelas Anda --</option>
+                    <option value="Kelas 1C">Kelas 1C</option>
+                    <option value="Kelas 1D">Kelas 1D</option>
+                    <option value="Kelas 1E">Kelas 1E</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" onclick="startGame()">AKTIFKAN 20 SOAL 🚀</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: ARENA DEKODER -->
+    <div id="game-screen" class="screen" style="padding: 0; justify-content: flex-start;">
+        <div class="hud-header">
+            <div class="player-tag" id="displayStudentInfo">👤 Mahasiswa</div>
+            <div class="hud-metrics">
+                <div class="metric-box metric-stage" id="stageCounter">Sinyal 1 / 20</div>
+                <div class="metric-box metric-lives" id="livesDisplay" title="Sisa Nyawa">❤️❤️❤️</div>
+                <div class="metric-box metric-score" id="liveScore">0 PTS</div>
+            </div>
+        </div>
+
+        <div class="progress-track">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div class="decoder-stage">
+            <div class="signal-monitor">
+                <div class="signal-badge" id="signalCode">INCOMING DATA PACKET #01</div>
+                <div class="signal-clue" id="signalClueText">Memuat data analisis...</div>
+                <div class="signal-hint-pill" id="signalHintText">Petunjuk karakteristik...</div>
+
+                <div class="decoder-slot" id="decoderSlot">
+                    [ KLIK ATAU TARIK CHIP GENRE KE SINI ]
+                </div>
+            </div>
+
+            <div class="deck-container">
+                <div class="deck-label">⚡ Pilih Chip Genre yang Sesuai dengan Data Sinyal di Atas</div>
+                <div class="chips-grid" id="chipsGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: HASIL & GOOGLE SHEETS -->
+    <div id="result-screen" class="screen">
+        <div class="result-box">
+            <h2 class="cyber-title" id="resultTitle" style="font-size: 20px;">DECODING COMPLETE</h2>
+            
+            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin: 14px 0; text-align: left; font-size: 12.5px; border: 1px solid rgba(6,182,212,0.35);">
+                <p><strong>Nama:</strong> <span id="resName">-</span></p>
+                <p><strong>NPM:</strong> <span id="resNpm">-</span></p>
+                <p><strong>Kelas:</strong> <span id="resClass">-</span></p>
+                <p><strong>Sisa Nyawa:</strong> <span id="resLives">-</span></p>
+            </div>
+
+            <div class="score-ring">
+                <span class="big-num" id="resScore">0</span>
+                <span class="max-num">DARI 100 POIN</span>
+            </div>
+
+            <div id="resBadgeContainer"></div>
+
+            <p id="statusSimpan" style="color: #facc15; font-size: 12.5px; font-weight: 600; margin-top: 12px;">⏳ Menyimpan data ke Google Sheets...</p>
+            
+            <button class="btn-primary" onclick="location.reload()" style="margin-top: 15px;">ULANGI SIMULASI 🔄</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // URL Google Apps Script Web App Anda (Sama persis dengan index.html)[cite: 1]
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYYCmsewvZUUpd_gM8JFdxtcJ7SNAza0uspPJdIyycZipalVOF012s_Jit81ExKSxX/exec";
+
+    // 14 Genre lengkap sesuai peta materi PPTX Pertemuan 3[cite: 2]
+    const genreChips = [
+        { id: "FPS", name: "FPS", icon: "🎯" },
+        { id: "TPS", name: "TPS", icon: "🎥" },
+        { id: "MOBA", name: "MOBA", icon: "⚔️" },
+        { id: "BATTLEROYALE", name: "Battle Royale", icon: "🪂" },
+        { id: "RTS", name: "RTS", icon: "🏰" },
+        { id: "TBS", name: "TBS", icon: "♟️" },
+        { id: "RPG", name: "RPG", icon: "🐉" },
+        { id: "SANDBOX", name: "Sandbox / Open World", icon: "🌍" },
+        { id: "PLATFORMER", name: "Platformer", icon: "🏃" },
+        { id: "SURVIVALHORROR", name: "Survival Horror", icon: "💀" },
+        { id: "PUZZLE", name: "Puzzle", icon: "🧩" },
+        { id: "SIMULATION", name: "Simulation", icon: "⚙️" },
+        { id: "FIGHTING", name: "Fighting", icon: "🥊" },
+        { id: "VISUALNOVEL", name: "Visual Novel", icon: "📖" }
+    ];
+
+    // 20 Soal Analisis Sinyal Data (Masing-masing bernilai 5 poin = Total 100)
+    const signalsData = [
+        {
+            code: "PACKET #01 • SUDUT PANDANG KAMERA",
+            clue: "Pemain melihat dunia permainan persis lewat mata karakter (hanya terlihat tangan & senjata di layar) dengan fokus pada akurasi bidikan (crosshair) dan refleks cepat.",
+            hint: "Contoh game: Counter-Strike 2, Valorant.",
+            answerId: "FPS"
+        },
+        {
+            code: "PACKET #02 • ARENA BERTAHAN HIDUP",
+            clue: "Puluhan pemain dijatuhkan ke satu peta luas tanpa perlengkapan awal, mencari senjata (looting), dan bertarung hingga tersisa satu pemenang terakhir.",
+            hint: "Contoh game: PUBG, Free Fire.",
+            answerId: "BATTLEROYALE"
+        },
+        {
+            code: "PACKET #03 • STRATEGI WAKTU NYATA",
+            clue: "Semua pemain bergerak, mengumpulkan sumber daya, membangun markas, dan menggerakkan pasukan secara bersamaan tanpa jeda giliran.",
+            hint: "Contoh game: StarCraft II, Age of Empires II.",
+            answerId: "RTS"
+        },
+        {
+            code: "PACKET #04 • TAKTIK BERGILIRAN",
+            clue: "Pemain dan lawan bergantian mengambil langkah di atas peta grid atau heksagon sehingga tersedia waktu berpikir matang tanpa tekanan kecepatan.",
+            hint: "Analogi: Seperti bermain catur. Contoh: Civilization VI.",
+            answerId: "TBS"
+        },
+        {
+            code: "PACKET #05 • PERTARUNGAN TIM 5V5",
+            clue: "Dua tim bertarung di satu arena berjalur (lane) menggunakan hero dengan peran khusus untuk menghancurkan base lawan.",
+            hint: "Contoh game: Mobile Legends, Dota 2.",
+            answerId: "MOBA"
+        },
+        {
+            code: "PACKET #06 • PERTUMBUHAN KARAKTER",
+            clue: "Pemain memerankan tokoh dalam cerita, menyelesaikan quest, serta meningkatkan level, XP, statistik (HP/serangan), dan inventori item.",
+            hint: "Contoh game: The Witcher 3, Final Fantasy VII.",
+            answerId: "RPG"
+        },
+        {
+            code: "PACKET #07 • EKSPLORASI & KREASI BEBAS",
+            clue: "Menyajikan peta luas tanpa urutan misi wajib; pemain bebas menjelajah, bereksperimen, serta membangun atau mengubah struktur dunia.",
+            hint: "Contoh game: Minecraft, GTA V.",
+            answerId: "SANDBOX"
+        },
+        {
+            code: "PACKET #08 • KETEPATAN LOMPATAN",
+            clue: "Mekanik utamanya adalah berlari, melompat, dan memanjat melewati pijakan (platform) serta rintangan dengan timing presisi menuju akhir level.",
+            hint: "Contoh game: Super Mario Bros., Celeste.",
+            answerId: "PLATFORMER"
+        },
+        {
+            code: "PACKET #09 • KAMERA ORANG KETIGA",
+            clue: "Kamera berada di belakang karakter sehingga seluruh tubuh terlihat di layar, memberikan pandangan sekitar yang luas serta sistem berlindung (cover).",
+            hint: "Contoh game: Uncharted 4, Gears of War.",
+            answerId: "TPS"
+        },
+        {
+            code: "PACKET #10 • TEROR & KETERBATASAN",
+            clue: "Pemain menghadapi ancaman monster dalam atmosfer mencekam dengan amunisi serta obat yang sangat terbatas, sehingga lari atau bersembunyi diutamakan.",
+            hint: "Contoh game: Resident Evil 2 Remake, Outlast.",
+            answerId: "SURVIVALHORROR"
+        },
+        {
+            code: "PACKET #11 • LOGIKA & POLA",
+            clue: "Tantangan utamanya memecahkan teka-teki menggunakan logika, pola, atau ruang tanpa pertarungan, menghasilkan momen 'aha!' saat solusi ketemu.",
+            hint: "Contoh game: Tetris, Portal 2, Candy Crush Saga.",
+            answerId: "PUZZLE"
+        },
+        {
+            code: "PACKET #12 • MENIRU DUNIA NYATA",
+            clue: "Meniru aktivitas atau sistem nyata seperti mengemudi truk, bertani, atau membangun kota dengan fokus pada proses dan pengelolaan manajemen.",
+            hint: "Contoh game: The Sims 4, Cities: Skylines.",
+            answerId: "SIMULATION"
+        },
+        {
+            code: "PACKET #13 • DUEL SATU LAWAN SATU",
+            clue: "Pertarungan di arena sempit menggunakan pukulan, tendangan, serta jurus spesial (combo) untuk menghabiskan health bar lawan dalam sistem ronde.",
+            hint: "Contoh game: Tekken 8, Street Fighter 6.",
+            answerId: "FIGHTING"
+        },
+        {
+            code: "PACKET #14 • NOVEL INTERAKTIF",
+            clue: "Cerita disampaikan dominan lewat teks, ilustrasi karakter bergaya anime, dan musik, di mana pemain sesekali memilih opsi untuk mengubah alur ending.",
+            hint: "Contoh game: Steins;Gate, Ace Attorney.",
+            answerId: "VISUALNOVEL"
+        },
+        {
+            code: "PACKET #15 • ROLE KSATRIA",
+            clue: "Jika pemain berperan sebagai seorang ksatria dalam dunia fantasi, menjalankan misi, melawan monster, dan meningkatkan kemampuan karakternya, apakah genre game tersebut?",
+            hint: "Pemain menjadi karakter",
+            answerId: "RPG"
+        },
+        {
+            code: "PACKET #16 • KUNCI REFLEKS & WAKTU",
+            clue: "Genre permainan yang mengharuskan pemain mengendalikan karakter untuk melompat, berlari, menghindari rintangan, serta melewati berbagai platform untuk mencapai tujuan disebut apa?",
+            hint: "Genre lompat dan rintangan.",
+            answerId: "PLATFORMER"
+        },
+        {
+            code: "PACKET #17 • PENGELOLAAN SUMBER DAYA",
+            clue: "Dalam sebuah permainan, pemain harus merencanakan pergerakan unit, mengatur sumber daya, dan menentukan serangan. Setiap pemain hanya dapat melakukan aksi ketika mendapatkan gilirannya. Apa genre permainan tersebut?",
+            hint: "Strategi bergiliran seperti catur.",
+            answerId: "TBS"
+        },
+        {
+            code: "PACKET #18 • KISAH & KARAKTER",
+            clue: "Genre permainan yang berfokus pada penyampaian cerita melalui teks, ilustrasi karakter, dialog, dan pilihan keputusan yang dapat memengaruhi jalan cerita disebut apa?",
+            hint: "Genre santai & cerita berbasis teks/pilihan.",
+            answerId: "VISUALNOVEL"
+        },
+        {
+            code: "PACKET #19 • PEMAIN TANPA RENCANA KAKU",
+            clue: "Genre permainan yang memberikan kebebasan kepada pemain untuk menjelajahi dunia terbuka, membangun sesuatu, mengumpulkan sumber daya, dan menentukan aktivitas tanpa harus mengikuti alur misi utama disebut apa?",
+            hint: "Contoh terbesarnya adalah Minecraft.",
+            answerId: "SANDBOX"
+        },
+        {
+            code: "PACKET #20 • KATEGORI DUNIA & CERITA",
+            clue: "Genre permainan yang menggabungkan unsur ketakutan, ketegangan, dan perjuangan bertahan hidup dengan menghadapi monster, makhluk mengerikan, atau ancaman berbahaya disebut apa?",
+            hint: "Bertahan hidup dari teror dan monster.",
+            answerId: "SURVIVALHORROR"
+        }
+    ];
+
+    let player = {
+        name: "",
+        npm: "",
+        classGroup: "",
+        score: 0,
+        lives: 3
+    };
+
+    let currentIndex = 0;
+    let isLocked = false;
+    let usedChipIds = new Set();
+
+    function startGame() {
+        const name = document.getElementById('playerName').value.trim();
+        const npm = document.getElementById('playerNPM').value.trim();
+        const classGroup = document.getElementById('playerClass').value;
+
+        if (!name || !npm || !classGroup) {
+            alert("Harap lengkapi Nama, NPM, dan Kelas terlebih dahulu!");
+            return;
+        }
+
+        player.name = name;
+        player.npm = npm;
+        player.classGroup = classGroup;
+        player.score = 0;
+        player.lives = 3;
+
+        document.getElementById('displayStudentInfo').innerText = `👤 ${player.name} (${player.npm}) • ${player.classGroup}`;
+        document.getElementById('register-screen').classList.remove('active');
+        document.getElementById('game-screen').classList.add('active');
+
+        renderDeck();
+        loadSignal();
+    }
+
+    function renderDeck() {
+        const grid = document.getElementById('chipsGrid');
+        grid.innerHTML = "";
+
+        genreChips.forEach(chip => {
+            const card = document.createElement('div');
+            card.className = `genre-chip ${usedChipIds.has(chip.id) ? 'used' : ''}`;
+            card.id = `chip-${chip.id}`;
+            card.draggable = !usedChipIds.has(chip.id);
+
+            card.innerHTML = `
+                <span class="chip-icon">${chip.icon}</span>
+                <span class="chip-name">${chip.name}</span>
+            `;
+
+            card.onclick = () => evaluateChip(chip.id, chip.name);
+
+            card.ondragstart = (e) => {
+                e.dataTransfer.setData("text/plain", chip.id);
+            };
+
+            grid.appendChild(card);
+        });
+
+        const slot = document.getElementById('decoderSlot');
+        slot.ondragover = (e) => {
+            e.preventDefault();
+            if (!isLocked) slot.classList.add('drag-over');
+        };
+        slot.ondragleave = () => slot.classList.remove('drag-over');
+        slot.ondrop = (e) => {
+            e.preventDefault();
+            slot.classList.remove('drag-over');
+            const chipId = e.dataTransfer.getData("text/plain");
+            const chipObj = genreChips.find(c => c.id === chipId);
+            if (chipObj) {
+                evaluateChip(chipObj.id, chipObj.name);
+            }
+        };
+    }
+
+    function loadSignal() {
+        if (currentIndex >= signalsData.length) {
+            finishGame("DECODING COMPLETE 🏆");
+            return;
+        }
+
+        isLocked = false;
+        const current = signalsData[currentIndex];
+
+        document.getElementById('stageCounter').innerText = `Sinyal ${currentIndex + 1} / ${signalsData.length}`;
+        document.getElementById('progressBar').style.width = `${((currentIndex + 1) / signalsData.length) * 100}%`;
+        document.getElementById('signalCode').innerText = current.code;
+        document.getElementById('signalClueText').innerText = current.clue;
+        document.getElementById('signalHintText').innerText = `💡 ${current.hint}`;
+
+        const slot = document.getElementById('decoderSlot');
+        slot.className = "decoder-slot";
+        slot.innerText = "[ KLIK ATAU TARIK CHIP GENRE KE SINI ]";
+    }
+
+    function evaluateChip(selectedId, selectedName) {
+        if (isLocked) return;
+        isLocked = true;
+
+        const current = signalsData[currentIndex];
+        const slot = document.getElementById('decoderSlot');
+
+        if (selectedId === current.answerId) {
+            player.score += 5; // 20 soal x 5 poin = 100 poin maksimal
+            document.getElementById('liveScore').innerText = `${player.score} PTS`;
+
+            slot.className = "decoder-slot correct-flash";
+            slot.innerText = `✅ MATCH: ${selectedName.toUpperCase()} (+5 PTS)`;
+
+            setTimeout(() => {
+                currentIndex++;
+                loadSignal();
+            }, 1000);
+        } else {
+            player.lives--;
+            updateLivesUI();
+
+            slot.className = "decoder-slot wrong-flash";
+            slot.innerText = `❌ ERROR: BUKAN ${selectedName.toUpperCase()} (-1 ❤️)`;
+
+            if (player.lives <= 0) {
+                setTimeout(() => {
+                    finishGame("SYSTEM FAILURE (NYAWA HABIS) 💔");
+                }, 1100);
+            } else {
+                setTimeout(() => {
+                    slot.className = "decoder-slot";
+                    slot.innerText = "[ COBA LAGI: PILIH CHIP YANG TEPAT ]";
+                    isLocked = false;
+                }, 1000);
+            }
+        }
+    }
+
+    function updateLivesUI() {
+        const hearts = "❤️".repeat(Math.max(0, player.lives)) + "🖤".repeat(Math.max(0, 3 - player.lives));
+        document.getElementById('livesDisplay').innerText = hearts;
+    }
+
+    function finishGame(statusTitle) {
+        document.getElementById('game-screen').classList.remove('active');
+        document.getElementById('result-screen').classList.add('active');
+
+        document.getElementById('resultTitle').innerText = statusTitle;
+        document.getElementById('resName').textContent = player.name;
+        document.getElementById('resNpm').textContent = player.npm;
+        document.getElementById('resClass').textContent = player.classGroup;
+        document.getElementById('resLives').textContent = `${player.lives} / 3 ❤️`;
+        document.getElementById('resScore').textContent = player.score;
+
+        const badgeContainer = document.getElementById('resBadgeContainer');
+        if (player.score >= 90) {
+            badgeContainer.innerHTML = `<span class="rank-badge rank-gold">🌟 Master Game Analyst (Sangat Memuaskan)</span>`;
+        } else if (player.score >= 70) {
+            badgeContainer.innerHTML = `<span class="rank-badge rank-silver">🥈 Senior Genre Specialist (Baik)</span>`;
+        } else if (player.score >= 50) {
+            badgeContainer.innerHTML = `<span class="rank-badge rank-bronze">🥉 Junior Analyst (Cukup)</span>`;
+        } else {
+            badgeContainer.innerHTML = `<span class="rank-badge rank-fail">⚠️ Perlu Mengulang Modul Genre Game</span>`;
+        }
+
+        sendDataToGoogleSheet();
+    }
+
+    function sendDataToGoogleSheet() {
+        const statusDiv = document.getElementById('statusSimpan');
+        statusDiv.style.color = "#facc15";
+        statusDiv.textContent = "⏳ Menyimpan data ke Google Sheets...";
+
+        if (SCRIPT_URL) {
+            const payload = {
+                nama: player.name,
+                npm: player.npm,
+                kelas: player.classGroup,
+                skor: player.score
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                statusDiv.style.color = "#4ade80";
+                statusDiv.textContent = "✅ Data Berhasil Disimpan!";
+            })
+            .catch(error => {
+                console.error("Gagal mengirim data:", error);
+                statusDiv.style.color = "#f87171";
+                statusDiv.textContent = "❌ Data Gagal Disimpan.";
+            });
+        } else {
+            statusDiv.style.color = "#f87171";
+            statusDiv.textContent = "❌ URL Google Script belum diatur!";
+        }
+    }
+</script>
+
+</body>
+</html>
